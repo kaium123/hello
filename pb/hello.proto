@@ -1,20 +1,22 @@
 syntax = "proto3";
+option go_package = "./proto";
 
-import "google/api/annotations.proto";
-import "validate/validate.proto";
+//import "googleapis/google/api/annotations.proto";
+//import "validate/validate.proto";
 
 package helloworld;
 
 service Greeter {
 	rpc SayHello (HelloRequest) returns (HelloReply) {
-		option(google.api.http) = {
-			get: "/api/hello/{name}",
-		};
+//		option (google.api.http) = {
+//			get: "/api/hello/{name}",
+//		};
 	}
 }
 
 message HelloRequest {
-	string name = 1 [(validate.rules).string.len = 3];
+//	string name = 1 [(validate.rules).string.len = 3];
+	string name = 1;
 }
 
 message HelloReply {

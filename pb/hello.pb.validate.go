@@ -40,7 +40,7 @@ func (m *HelloRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
-
+	fmt.Println(m.GetName())
 	if utf8.RuneCountInString(m.GetName()) != 3 {
 		return HelloRequestValidationError{
 			field:  "Name",

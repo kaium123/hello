@@ -40,7 +40,7 @@ func (g *Greeter) WaitStop() {
 	g.wg.Wait()
 }
 func (g *Greeter) startGRPC() error {
-	lis, err := net.Listen("tcp", "localhost:8080")
+	lis, err := net.Listen("tcp", "localhost:8085")
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func (g *Greeter) startREST() error {
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := pb.RegisterGreeterHandlerFromEndpoint(ctx, mux, ":8080", opts)
+	err := pb.RegisterGreeterHandlerFromEndpoint(ctx, mux, ":8085", opts)
 	if err != nil {
 		return err
 	}
@@ -66,6 +66,7 @@ func (g *Greeter) startREST() error {
 
 // SayHello says hello
 func (g *Greeter) SayHello(ctx context.Context, r *pb.HelloRequest) (*pb.HelloReply, error) {
+
 	if err := r.Validate(); err != nil {
 		return nil, err
 	}
