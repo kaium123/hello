@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"os"
 	"time"
 
@@ -19,11 +19,11 @@ const (
 func main() {
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("Failed to connect: %v", err)
+		fmt.Println(err)
 	}
 	defer conn.Close()
 
-	client := pb.NewGreeterClient(conn)
+	client := pb.NewServiceClient(conn)
 
 	name := defaultName
 	if len(os.Args) > 1 {
@@ -33,10 +33,10 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	res, err := client.SayHello(ctx, &pb.HelloRequest{Name: name})
+	res, err := client.Hello(ctx, &pb.Request{Name: name})
 	if err != nil {
-		log.Fatalf("Failed to call SayHello: %v", err)
+		fmt.Println(err)
 	}
 
-	log.Printf("Response: %s", res.Greeting)
+	fmt.Println(res.Res)
 }

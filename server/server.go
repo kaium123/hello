@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 
@@ -11,24 +12,25 @@ import (
 )
 
 type server struct {
-	pb.UnimplementedGreeterServer
+	pb.UnimplementedServiceServer
 }
 
-func (s *server) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.HelloResponse, error) {
-	return &pb.HelloResponse{Greeting: "Hello, " + req.Name + "!"}, nil
+func (s *server) Hello(ctx context.Context, req *pb.Request) (*pb.Response, error) {
+	return &pb.Response{Res: "Hello " + req.Name}, nil
 }
 
 func main() {
-	lis, err := net.Listen("tcp", ":50051")
+	listener, err := net.Listen("tcp", "0.0.0.0:50051")
+
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		fmt.Println(err)
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, &server{})
+	pb.RegisterServiceServer(s, &server{})
 
 	log.Println("Server is listening on port 50051")
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve: %v", err)
+	if err := s.Serve(listener); err != nil {
+		fmt.Println(err)
 	}
 }

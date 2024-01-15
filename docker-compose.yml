@@ -1,0 +1,15 @@
+version: '3'
+services:
+  grpc-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "50052:50051"
+
+  envoy-proxy:
+    image: envoyproxy/envoy:v1.18.3
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - "8080:8080"
